@@ -30,10 +30,10 @@ SoundLayers Pi es un proyecto de Raspberry Pi que utiliza un sensor capacitivo p
 2. Instala las dependencias necesarias:
 
     ```bash
-    pip install adafruit-circuitpython-mpr121 pygame
+    pip install -r requirements.txt
     ```
 
-3. Asegúrate de que los archivos de audio (`base.mp3`, `armonía.mp3`, `ritmo.mp3`, `arreglos.mp3`, `voces.mp3`) estén en el mismo directorio que el script de Python.
+3. Asegúrate de que los archivos de audio estén en el mismo directorio que el script de Python.
 
 ## Uso
 
