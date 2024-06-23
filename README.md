@@ -5,7 +5,7 @@ SoundLayers Pi es un proyecto de Raspberry Pi que utiliza un sensor capacitivo p
 ## Características
 
 - Detección de toques usando un sensor capacitivo I2C (MPR121).
-- Reproducción de hasta 5 pistas de audio diferentes.
+- Reproducción de múltiples pistas de audio diferentes.
 - Superposición de capas de sonido con transiciones suaves (fade-in y fade-out).
 - Control dinámico para añadir y eliminar capas de sonido.
 
@@ -33,16 +33,27 @@ SoundLayers Pi es un proyecto de Raspberry Pi que utiliza un sensor capacitivo p
     pip install -r requirements.txt
     ```
 
-3. Asegúrate de que los archivos de audio estén en el mismo directorio que el script de Python.
+3. Asegúrate de que los archivos de audio estén en las carpetas correctas y sean accesibles por el script.
 
 ## Uso
 
 1. Conecta el sensor capacitivo MPR121 a la Raspberry Pi usando los pines I2C (SCL y SDA).
 
-2. Ejecuta el script de Python:
+2. Configura la carpeta de pistas de audio que deseas usar editando la variable `folder` en el script `soundlayers_pi.py`.
+
+3. Ejecuta el script de Python:
 
     ```bash
     python soundlayers_pi.py
     ```
 
-3. Toca la malla conectada al sensor MPR121 para añadir o eliminar capas de sonido. El primer toque reproducirá `base.mp3`, el segundo toque superpondrá `armonía.mp3`, y así sucesivamente hasta alcanzar un máximo de 5 capas de sonido. Tocando nuevamente se eliminarán las capas en orden inverso.
+4. Toca la malla conectada al sensor MPR121 o presiona la barra espaciadora en tu teclado para añadir o eliminar capas de sonido. El primer toque reproducirá la primera pista, el segundo toque superpondrá la segunda pista, y así sucesivamente hasta alcanzar el máximo número de capas. Tocando nuevamente se eliminarán las capas en orden inverso.
+
+## Contribuciones
+¡Las contribuciones son bienvenidas! Siéntete libre de abrir un issue o enviar un pull request.
+
+## Licencia
+Este proyecto está licenciado bajo la Licencia Pública General de GNU, versión 3.
+
+## Propiedad de las Pistas de Audio
+Todas las pistas de audio en las carpeta Tracks son propiedad del Centro Cultural Nuna Humanista Ecuador y pueden tener otra licencia.

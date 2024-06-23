@@ -25,7 +25,8 @@ folder2 = "Tracks\GRUPO AGUA"
 folder3 = "Tracks\GRUPO FESTEJO"
 folder4 = "Tracks\GRUPO INTRO"
 folder5 = "Tracks\GRUPO MONTAÑA"
-folder6 = "Tracks\GRUPO RITUAL"
+folder6 = "Tracks\GRUPO PELILEO"
+folder7 = "Tracks\GRUPO RITUAL"
 
 # Cargamos los archivos de audio de la carpeta seleccionada
 tracks = load_tracks(folder6)
