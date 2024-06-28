@@ -1,8 +1,10 @@
+#! /usr/bin/env python
 import os
 import time
 import pygame
 import pygame.mixer
 import RPi.GPIO as GPIO
+from threading import Timer
 
 # Configuración del GPIO
 vibration_pin = 4  # Cambia este pin según tu configuración
@@ -22,16 +24,16 @@ def load_tracks(folder):
 
 # Selecciona la carpeta de tracks a usar
 # Aquí puedes cambiar la carpeta según el grupo que quieras probar
-folder1 = "Tracks/chamiza grupos"
-folder2 = "Tracks/GRUPO AGUA"
-folder3 = "Tracks/GRUPO FESTEJO"
-folder4 = "Tracks/GRUPO INTRO"
-folder5 = "Tracks/GRUPO MONTAÑA"
-folder6 = "Tracks/GRUPO PELILEO"
-folder7 = "Tracks/GRUPO RITUAL"
+folder1 = "/home/nuna/SoundLayersPi/Tracks/chamiza grupos"
+folder2 = "/home/nuna/SoundLayersPi/Tracks/GRUPO AGUA"
+folder3 = "/home/nuna/SoundLayersPi/Tracks/GRUPO FESTEJO"
+folder4 = "/home/nuna/SoundLayersPi/Tracks/GRUPO INTRO"
+folder5 = "/home/nuna/SoundLayersPi/Tracks/GRUPO MONTAÑA"
+folder6 = "/home/nuna/SoundLayersPi/Tracks/GRUPO PELILEO"
+folder7 = "/home/nuna/SoundLayersPi/Tracks/GRUPO RITUAL"
 
 # Cargamos los archivos de audio de la carpeta seleccionada
-tracks = load_tracks(folder3)
+tracks = load_tracks(folder7)
 
 # Variables para el control de las capas de sonido
 current_layers = 0
@@ -40,6 +42,9 @@ adding_layers = True
 
 # Duración del fade-in y fade-out en milisegundos
 fade_duration = 1000
+
+auto_stop_timer=None
+auto_stop_delay=60
 
 def play_next_layer():
     global current_layers
@@ -56,7 +61,7 @@ def stop_last_layer():
         print(f"Eliminando capa {current_layers + 1}")
 
 def process_input():
-    global adding_layers
+    global adding_layers, auto_stop_timer
     if adding_layers:
         play_next_layer()
         if current_layers == max_layers:
@@ -65,6 +70,19 @@ def process_input():
         stop_last_layer()
         if current_layers == 0:
             adding_layers = True
+            
+    if auto_stop_timer is not None:
+        auto_stop_timer.cancel()
+    auto_stop_timer= Timer(auto_stop_delay,auto_stop_layers)
+    auto_stop_timer.start()
+    
+def auto_stop_layers():
+    global current_layers, auto_stop_timer
+    if current_layers>0:
+        stop_last_layer()
+        auto_stop_timer=Timer(fade_duration/1000,auto_stop_layers)
+        auto_stop_timer.start()
+
 
 # Bucle principal
 try:
@@ -75,7 +93,7 @@ try:
         if GPIO.input(vibration_pin) == GPIO.HIGH:
             print("Sensor de vibración activado!")
             process_input()
-            time.sleep(0.5)  # Pequeña espera para evitar múltiples detecciones rápidas
+            time.sleep(1)  # Pequeña espera para evitar múltiples detecciones rápidas
 
         time.sleep(0.1)
 except KeyboardInterrupt:
