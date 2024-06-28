@@ -2,6 +2,12 @@ import os
 import time
 import pygame
 import pygame.mixer
+import RPi.GPIO as GPIO
+
+# Configuración de GPIO
+VIBRATION_SENSOR_PIN = 4  # Cambia este valor según tu configuración
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(VIBRATION_SENSOR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Inicializamos Pygame y el mezclador de audio
 pygame.init()
@@ -53,6 +59,17 @@ def stop_last_layer():
         tracks[current_layers].fadeout(fade_duration)  # Fade-out del sonido
         print(f"Eliminando capa {current_layers + 1}")
 
+def process_input():
+    global adding_layers
+    if adding_layers:
+        play_next_layer()
+        if current_layers == max_layers:
+            adding_layers = False
+    else:
+        stop_last_layer()
+        if current_layers == 0:
+            adding_layers = True
+
 # Bucle principal
 try:
     running = True
@@ -63,18 +80,19 @@ try:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # Usa la barra espaciadora para simular el toque en la malla
                     print("Tecla presionada!")
-                    if adding_layers:
-                        play_next_layer()
-                        if current_layers == max_layers:
-                            adding_layers = False
-                    else:
-                        stop_last_layer()
-                        if current_layers == 0:
-                            adding_layers = True
+                    process_input()
                     time.sleep(0.5)  # Pequeña espera para evitar múltiples detecciones rápidas
+
+        # Lectura desde el sensor de vibración
+        if GPIO.input(vibration_pin) == GPIO.HIGH:
+            print("Sensor de vibración activado!")
+            process_input()
+            time.sleep(0.5)  # Pequeña espera para evitar múltiples detecciones rápidas
+
         time.sleep(0.1)
 except KeyboardInterrupt:
     print("Programa terminado.")
 finally:
     pygame.mixer.quit()
     pygame.quit()
+    GPIO.cleanup()

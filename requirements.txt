@@ -1,2 +1,2 @@
-adafruit-circuitpython-mpr121==2.1.20
 pygame
+RPi.GPIO
