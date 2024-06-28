@@ -5,16 +5,12 @@ import pygame.mixer
 import RPi.GPIO as GPIO
 
 # Configuración del GPIO
-vibration_pin = 17  # Cambia este pin según tu configuración
+vibration_pin = 4  # Cambia este pin según tu configuración
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(vibration_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Inicializamos Pygame y el mezclador de audio
-pygame.init()
 pygame.mixer.init()
-
-# Configuración de la pantalla para capturar eventos del teclado
-screen = pygame.display.set_mode((100, 100))
 
 # Función para cargar los archivos de audio de una carpeta específica
 def load_tracks(folder):
@@ -26,16 +22,16 @@ def load_tracks(folder):
 
 # Selecciona la carpeta de tracks a usar
 # Aquí puedes cambiar la carpeta según el grupo que quieras probar
-folder1 = "Tracks\chamiza grupos"
-folder2 = "Tracks\GRUPO AGUA"
-folder3 = "Tracks\GRUPO FESTEJO"
-folder4 = "Tracks\GRUPO INTRO"
-folder5 = "Tracks\GRUPO MONTAÑA"
-folder6 = "Tracks\GRUPO PELILEO"
-folder7 = "Tracks\GRUPO RITUAL"
+folder1 = "Tracks/chamiza grupos"
+folder2 = "Tracks/GRUPO AGUA"
+folder3 = "Tracks/GRUPO FESTEJO"
+folder4 = "Tracks/GRUPO INTRO"
+folder5 = "Tracks/GRUPO MONTAÑA"
+folder6 = "Tracks/GRUPO PELILEO"
+folder7 = "Tracks/GRUPO RITUAL"
 
 # Cargamos los archivos de audio de la carpeta seleccionada
-tracks = load_tracks(folder6)
+tracks = load_tracks(folder3)
 
 # Variables para el control de las capas de sonido
 current_layers = 0
@@ -74,14 +70,6 @@ def process_input():
 try:
     running = True
     while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:  # Usa la barra espaciadora para simular el toque en la malla
-                    print("Tecla presionada!")
-                    process_input()
-                    time.sleep(0.5)  # Pequeña espera para evitar múltiples detecciones rápidas
 
         # Lectura desde el sensor de vibración
         if GPIO.input(vibration_pin) == GPIO.HIGH:
@@ -94,5 +82,4 @@ except KeyboardInterrupt:
     print("Programa terminado.")
 finally:
     pygame.mixer.quit()
-    pygame.quit()
     GPIO.cleanup()
