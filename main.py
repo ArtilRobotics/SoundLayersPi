@@ -4,10 +4,10 @@ import pygame
 import pygame.mixer
 import RPi.GPIO as GPIO
 
-# Configuración de GPIO
-VIBRATION_SENSOR_PIN = 4  # Cambia este valor según tu configuración
+# Configuración del GPIO
+vibration_pin = 17  # Cambia este pin según tu configuración
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(VIBRATION_SENSOR_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(vibration_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 # Inicializamos Pygame y el mezclador de audio
 pygame.init()
