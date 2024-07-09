@@ -33,7 +33,7 @@ folder6 = "/home/nuna/SoundLayersPi/Tracks/GRUPO PELILEO"
 folder7 = "/home/nuna/SoundLayersPi/Tracks/GRUPO RITUAL"
 
 # Cargamos los archivos de audio de la carpeta seleccionada
-tracks = load_tracks(folder7)
+tracks = load_tracks(folder55)
 
 # Variables para el control de las capas de sonido
 current_layers = 0
@@ -41,10 +41,10 @@ max_layers = len(tracks)  # Ajusta el número máximo de capas según los archiv
 adding_layers = True
 
 # Duración del fade-in y fade-out en milisegundos
-fade_duration = 1000
+fade_duration = 1
 
 auto_stop_timer=None
-auto_stop_delay=60
+auto_stop_delay=120
 
 def play_next_layer():
     global current_layers
@@ -66,18 +66,18 @@ def process_input():
         play_next_layer()
         if current_layers == max_layers:
             adding_layers = False
-    else:
-        stop_last_layer()
-        if current_layers == 0:
-            adding_layers = True
-            
+  #  else:
+  #      stop_last_layer()
+  #      if current_layers == 0:
+  #          adding_layers = True
     if auto_stop_timer is not None:
         auto_stop_timer.cancel()
     auto_stop_timer= Timer(auto_stop_delay,auto_stop_layers)
     auto_stop_timer.start()
-    
+
 def auto_stop_layers():
-    global current_layers, auto_stop_timer
+    global current_layers, auto_stop_timer, adding_layers
+    adding_layers = True
     if current_layers>0:
         stop_last_layer()
         auto_stop_timer=Timer(fade_duration/1000,auto_stop_layers)
@@ -93,7 +93,7 @@ try:
         if GPIO.input(vibration_pin) == GPIO.HIGH:
             print("Sensor de vibración activado!")
             process_input()
-            time.sleep(1)  # Pequeña espera para evitar múltiples detecciones rápidas
+            time.sleep(.5)  # Pequeña espera para evitar múltiples detecciones rápidas
 
         time.sleep(0.1)
 except KeyboardInterrupt:
